@@ -56,5 +56,24 @@ export default (app: Application): void => {
         }
     });
 
-    app.use('/users/:userId/articles', new ArticleService())
+    app.use('/users/:userId/articles', new ArticleService());
+    const articleService = app.service('users/:userId/articles');
+
+    // Add a before hook for '/users/:userId/articles' route
+    articleService.hooks({
+        before: {
+            all: [validateUserExistence]
+        }
+    });
 };
+
+async function validateUserExistence(context: any) {
+    const { params } = context;
+    const userId = params.route.userId;
+
+    // Check if the user exists
+    const user = await User.findByPk(userId);
+    if (!user) {
+        throw new Error('User not found');
+    }
+}
