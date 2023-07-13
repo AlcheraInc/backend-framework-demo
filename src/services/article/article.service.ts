@@ -1,8 +1,7 @@
-import { Application } from '@feathersjs/express';
-import { Params } from '@feathersjs/feathers';
+import {Application} from '@feathersjs/express';
+import {Params} from '@feathersjs/feathers';
 import {Article, User} from '../../models';
 import {PictureService} from "../picture/picture.service";
-import {hashName} from "../user/user.hook";
 
 interface ArticleData {
     id?: number;
@@ -11,35 +10,50 @@ interface ArticleData {
 
 export class ArticleService {
     async find(params: Params) {
-        const { userId } = params?.route;
-        return Article.findAll({ where: { userId } });
+        const {userId} = params?.route;
+        return Article.findAll({
+            include: [
+                {
+                    model: User,
+                    where: {id: userId}
+                }
+            ]
+        });
     }
 
     async get(id: number | string, params: Params) {
-        const { userId } = params.route;
-        return Article.findOne({ where: { id, userId } });
+        const {userId} = params.route;
+        return Article.findOne({
+            where: {id},
+            include: [
+                {
+                    model: User,
+                    where: {id: userId}
+                }
+            ]
+        });
     }
 
     async create(data: ArticleData, params: Params) {
-        const { userId } = params.route;
-        return Article.create({ ...data, userId });
+        const {userId} = params.route;
+        return Article.create({...data, userId});
     }
 
     async update(id: number | string, data: ArticleData, params: Params) {
-        const { userId } = params.route;
-        await Article.update(data, { where: { id, userId } });
-        return Article.findOne({ where: { id, userId } });
+        const {userId} = params.route;
+        await Article.update(data, {where: {id, userId}});
+        return Article.findOne({where: {id, userId}});
     }
 
     async patch(id: number | string, data: ArticleData, params: Params) {
-        const { userId } = params.route;
-        await Article.update(data, { where: { id, userId } });
-        return Article.findOne({ where: { id, userId } });
+        const {userId} = params.route;
+        await Article.update(data, {where: {id, userId}});
+        return Article.findOne({where: {id, userId}});
     }
 
     async remove(id: number | string, params: Params) {
-        const { userId } = params.route;
-        const article = await Article.findOne({ where: { id, userId } });
+        const {userId} = params.route;
+        const article = await Article.findOne({where: {id, userId}});
         if (article) {
             await article.destroy();
             return article;
@@ -69,7 +83,7 @@ export default (app: Application): void => {
 };
 
 async function validateArticleExistence(context: any) {
-    const { params } = context;
+    const {params} = context;
     const articleId = params.route.articleId;
 
     // Check if the user exists
