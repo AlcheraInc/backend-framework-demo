@@ -2,6 +2,7 @@ import { Application } from '@feathersjs/express';
 import { Params } from '@feathersjs/feathers';
 import {Article, User} from '../../models';
 import {PictureService} from "../picture/picture.service";
+import {hashName} from "../user/user.hook";
 
 interface ArticleData {
     id?: number;
@@ -48,7 +49,14 @@ export class ArticleService {
 }
 
 export default (app: Application): void => {
-    //app.use('/users/:user_id/articles', new ArticleService());
+    const articleService = app.service('users/:userId/articles');
+
+    articleService.hooks({
+        after: {
+            all: [logging]
+        }
+    });
+
     app.use('/users/:userId/articles/:articleId/pictures', new PictureService());
     const pictureService = app.service('/users/:userId/articles/:articleId/pictures');
 
@@ -69,4 +77,8 @@ async function validateArticleExistence(context: any) {
     if (!article) {
         throw new Error('Article not found');
     }
+}
+
+async function logging(context: any) {
+    console.log(context);
 }

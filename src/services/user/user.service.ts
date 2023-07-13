@@ -53,6 +53,9 @@ export default (app: Application): void => {
         before: {
             update: [hashName],
             patch: [hashName]
+        },
+        after: {
+            all: [logging],
         }
     });
 
@@ -76,4 +79,8 @@ async function validateUserExistence(context: any) {
     if (!user) {
         throw new Error('User not found');
     }
+}
+
+async function logging(context: any) {
+    console.log(context);
 }
