@@ -9,42 +9,35 @@ interface ArticleData {
 
 export class ArticleService {
     async find(params: Params) {
-        const { user_id } = params?.route;
-        console.log(params);
-        console.log(user_id);
-        return Article.findAll({ where: { userId: user_id } });
+        const { userId } = params?.route;
+        return Article.findAll({ where: { userId } });
     }
 
-    async get(id: number | string) {
-        return Article.findByPk(id);
+    async get(id: number | string, params: Params) {
+        const { userId } = params.route;
+        return Article.findOne({ where: { id, userId } });
     }
 
-    async create(params: Params, data: any) {
-        const { user_id } = params?.route;
-        console.log(data);
-        //console.log(articleData);
-        if (typeof user_id === 'undefined') {
-            throw new Error('Invalid user ID');
-        }
-
-        return Article.create({
-            ...data,
-            userId: user_id
-        });
+    async create(data: ArticleData, params: Params) {
+        const { userId } = params.route;
+        return Article.create({ ...data, userId });
     }
 
-    async update(id: number | string, data: any) {
-        await Article.update(data, { where: { id } });
-        return Article.findByPk(id);
+    async update(id: number | string, data: ArticleData, params: Params) {
+        const { userId } = params.route;
+        await Article.update(data, { where: { id, userId } });
+        return Article.findOne({ where: { id, userId } });
     }
 
-    async patch(id: number | string, data: any) {
-        await Article.update(data, { where: { id } });
-        return Article.findByPk(id);
+    async patch(id: number | string, data: ArticleData, params: Params) {
+        const { userId } = params.route;
+        await Article.update(data, { where: { id, userId } });
+        return Article.findOne({ where: { id, userId } });
     }
 
-    async remove(id: number | string) {
-        const article = await Article.findByPk(id);
+    async remove(id: number | string, params: Params) {
+        const { userId } = params.route;
+        const article = await Article.findOne({ where: { id, userId } });
         if (article) {
             await article.destroy();
             return article;

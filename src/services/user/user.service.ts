@@ -56,5 +56,5 @@ export default (app: Application): void => {
         }
     });
 
-    app.use('/users/:user_id/articles', new ArticleService())
+    app.use('/users/:userId/articles', new ArticleService())
 };
