@@ -1,6 +1,7 @@
 import { Sequelize } from 'sequelize';
 import userModel from './user.model';
 import articleModel from './article.model';
+import pictureModel from "./picture.model";
 
 export const sequelize = new Sequelize({
     dialect: 'sqlite',
@@ -9,6 +10,7 @@ export const sequelize = new Sequelize({
 
 const User = userModel(sequelize);
 const Article = articleModel(sequelize);
+const Picture = pictureModel(sequelize);
 
 User.hasMany(Article, {
     foreignKey: {
@@ -21,8 +23,20 @@ Article.belongsTo(User, {
     }
 });
 
+Article.hasMany(Picture, {
+    foreignKey: {
+        name: 'articleId'
+    }
+});
+Picture.belongsTo(Article, {
+    foreignKey: {
+        name: 'articleId'
+    }
+});
+
+
 sequelize.sync({ force: true }).then(() => {
     console.log("Database & tables created!");
 });
 
-export { User, Article };
+export { User, Article, Picture };

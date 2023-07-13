@@ -1,6 +1,7 @@
 import { Application } from '@feathersjs/express';
 import { Params } from '@feathersjs/feathers';
-import { Article } from '../../models';
+import {Article, User} from '../../models';
+import {PictureService} from "../picture/picture.service";
 
 interface ArticleData {
     id?: number;
@@ -48,4 +49,24 @@ export class ArticleService {
 
 export default (app: Application): void => {
     //app.use('/users/:user_id/articles', new ArticleService());
+    app.use('/users/:userId/articles/:articleId/pictures', new PictureService());
+    const pictureService = app.service('/users/:userId/articles/:articleId/pictures');
+
+    // Add a before hook for '/users/:userId/articles/:articleId/pictures' route
+    pictureService.hooks({
+        before: {
+            all: [validateArticleExistence]
+        }
+    });
 };
+
+async function validateArticleExistence(context: any) {
+    const { params } = context;
+    const articleId = params.route.articleId;
+
+    // Check if the user exists
+    const article = await Article.findByPk(articleId);
+    if (!article) {
+        throw new Error('Article not found');
+    }
+}
