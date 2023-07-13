@@ -80,5 +80,6 @@ async function validateArticleExistence(context: any) {
 }
 
 async function logging(context: any) {
-    console.log(context);
+    const current_time = new Date();
+    console.log(`Distributed Logging Hook - Article ${current_time}`);
 }

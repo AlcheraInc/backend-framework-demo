@@ -82,5 +82,6 @@ async function validateUserExistence(context: any) {
 }
 
 async function logging(context: any) {
-    console.log(context);
+    const current_time = new Date();
+    console.log(`Distributed Logging Hook - User ${current_time}`);
 }

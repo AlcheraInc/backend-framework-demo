@@ -72,6 +72,16 @@ export class PictureService {
 }
 
 export default (app: Application): void => {
-    //const pictureService = new PictureService();
-    //app.use('/users/:userId/articles/:articleId/pictures', pictureService);
+    const pictureService = app.service('users/:userId/articles/:articleId/pictures');
+
+    pictureService.hooks({
+        after: {
+            all: [logging]
+        }
+    });
 };
+
+async function logging(context: any) {
+    const current_time = new Date();
+    console.log(`Distributed Logging Hook - Picture ${current_time}`);
+}
