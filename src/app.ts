@@ -1,24 +1,21 @@
-import { feathers } from '@feathersjs/feathers';
+import { feathers } from '@feathersjs/feathers'
+import express, {json, rest, urlencoded, errorHandler } from '@feathersjs/express'
 import services from "./services";
-import { koa, rest, bodyParser, errorHandler, serveStatic } from '@feathersjs/koa'
 
+const app = express(feathers())
 
-type ServiceTypes = {
-    services
-}
+app.use(errorHandler());
 
-const app = koa<ServiceTypes>(feathers())
+// Serve static files from the current directory
+app.use(json());
 
-// Use the current folder for static file hosting
-app.use(serveStatic('.'))
-// Register the error handle
-app.use(errorHandler())
-// Parse JSON request bodies
-app.use(bodyParser())
-
-// Register REST service handler
+app.use(urlencoded({ extended: true }))
+// Set up REST transport
 app.configure(rest())
 
+// Register services
 app.configure(services);
+
+app.set('port', 3000);
 
 export default app;

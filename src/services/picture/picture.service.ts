@@ -72,13 +72,13 @@ export class PictureService {
 }
 
 export default (app: Application): void => {
-    const pictureService = app.service('users/:userId/articles/:articleId/pictures');
-
-    pictureService.hooks({
-        after: {
-            all: [logging]
-        }
-    });
+    // const pictureService = app.service('users/:userId/articles/:articleId/pictures');
+    //
+    // pictureService.hooks({
+    //     after: {
+    //         all: [logging]
+    //     }
+    // });
 };
 
 async function logging(context: any) {

@@ -1,8 +1,8 @@
 // user.service.ts
-import { Application } from '@feathersjs/express';
-import { User} from '../../models';
-import { hashName } from './user.hook';
-import { ArticleService } from '../article/article.service';
+import {Application} from '@feathersjs/express';
+import {User} from '../../models';
+import {hashName} from './user.hook';
+import articleRouter from "./article.router";
 
 interface UserData {
     id?: number;
@@ -23,12 +23,12 @@ class UserService {
     }
 
     async update(id: number | string, data: UserData) {
-        await User.update(data, { where: { id } });
+        await User.update(data, {where: {id}});
         return User.findByPk(id);
     }
 
     async patch(id: number | string, data: UserData) {
-        await User.update(data, { where: { id } });
+        await User.update(data, {where: {id}});
         return User.findByPk(id);
     }
 
@@ -59,19 +59,11 @@ export default (app: Application): void => {
         }
     });
 
-    app.use('/users/:userId/articles', new ArticleService());
-    const articleService = app.service('users/:userId/articles');
-
-    // Add a before hook for '/users/:userId/articles' route
-    articleService.hooks({
-        before: {
-            all: [validateUserExistence]
-        }
-    });
+    app.use('/users/:userId/articles', articleRouter);
 };
 
 async function validateUserExistence(context: any) {
-    const { params } = context;
+    const {params} = context;
     const userId = params.route.userId;
 
     // Check if the user exists
