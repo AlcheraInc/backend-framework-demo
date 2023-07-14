@@ -1,41 +1,41 @@
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
 
-interface PictureAttributes {
+interface ArticleAttributes {
     id: number;
-    tag: string;
-    articleId: number;
+    title: string;
+    userId: number;
 }
 
-interface PictureCreationAttributes extends Optional<PictureAttributes, 'id'> {}
+interface ArticleCreationAttributes extends Optional<ArticleAttributes, 'id'> {}
 
-class Picture extends Model<PictureAttributes, PictureCreationAttributes> implements PictureAttributes {
+class Article extends Model<ArticleAttributes, ArticleCreationAttributes> implements ArticleAttributes {
     public id!: number;
-    public tag!: string;
-    public articleId!: number;
+    public title!: string;
+    public userId!: number;
 }
 
-export default (sequelize: Sequelize): typeof Picture => {
-    Picture.init(
+export default (sequelize: Sequelize): typeof Article => {
+    Article.init(
         {
             id: {
                 type: DataTypes.INTEGER.UNSIGNED,
                 autoIncrement: true,
                 primaryKey: true,
             },
-            tag: {
+            title: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
-            articleId: {
+            userId: {
                 type: DataTypes.INTEGER.UNSIGNED,
                 allowNull: false,
             },
         },
         {
-            tableName: 'pictures',
+            tableName: 'articles',
             sequelize,
         }
     );
 
-    return Picture;
+    return Article;
 };

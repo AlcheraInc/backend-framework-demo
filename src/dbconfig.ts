@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
-import userModel from './user.model';
-import articleModel from './article.model';
-import pictureModel from "./picture.model";
+import userModel from './user/user.model';
+import articleModel from './article/article.model';
+import pictureModel from "./picture/picture.model";
 
 export const sequelize = new Sequelize({
     dialect: 'sqlite',

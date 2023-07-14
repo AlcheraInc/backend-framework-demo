@@ -1,6 +1,6 @@
 import {Application} from '@feathersjs/express';
 import {Params} from '@feathersjs/feathers';
-import {Article} from '../../models';
+import {Article} from '../dbconfig';
 
 interface ArticleData {
     id?: number;

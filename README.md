@@ -11,7 +11,7 @@ yarn install
 First, run the development server:
 
 ```
-npx ts-node src/index.ts
+npx ts-node src/dbconfig.ts
 ```
 
 Then you can see the result with sending request to http:localhost:3000

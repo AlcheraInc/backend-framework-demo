@@ -1,6 +1,6 @@
 import {Application} from '@feathersjs/express';
 import {Params} from '@feathersjs/feathers';
-import {Article, Picture, User} from '../../models';
+import {User, Article, Picture} from '../dbconfig';
 
 interface PictureData {
     id?: number;
